@@ -1,15 +1,20 @@
-package com.example.application.data.service;
+package com.example.application.data.service.user;
 
 import com.example.application.data.entity.User;
+
+import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.vaadin.crudui.crud.CrudListener;
 
 @Service
-public class UserService {
+
+public class UserService implements CrudListener<User> {
 
     private final UserRepository repository;
 
@@ -22,8 +27,23 @@ public class UserService {
         return repository.findById(id);
     }
 
+    @Override
+    public Collection<User> findAll() {
+        return repository.findAll();
+    }
+
+    @Override
+    public User add(User domainObjectToAdd) {
+        return repository.save(domainObjectToAdd);
+    }
+
     public User update(User entity) {
         return repository.save(entity);
+    }
+
+    @Override
+    public void delete(User domainObjectToDelete) {
+        repository.delete(domainObjectToDelete);
     }
 
     public void delete(UUID id) {

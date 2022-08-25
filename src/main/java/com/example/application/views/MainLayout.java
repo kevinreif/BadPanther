@@ -2,12 +2,15 @@ package com.example.application.views;
 
 import com.example.application.data.entity.User;
 import com.example.application.security.AuthenticatedUser;
+import com.example.application.security.SecurityService;
 import com.example.application.views.about.AboutView;
-import com.example.application.views.helloworld.HelloWorldView;
+import com.example.application.views.newClient.NewClientView;
+import com.example.application.views.newuser.NewUserView;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.avatar.Avatar;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.contextmenu.ContextMenu;
 import com.vaadin.flow.component.dependency.NpmPackage;
@@ -20,9 +23,12 @@ import com.vaadin.flow.component.html.ListItem;
 import com.vaadin.flow.component.html.Nav;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.html.UnorderedList;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.auth.AccessAnnotationChecker;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import java.util.Optional;
 
 /**
@@ -74,8 +80,10 @@ public class MainLayout extends AppLayout {
 
     private AuthenticatedUser authenticatedUser;
     private AccessAnnotationChecker accessChecker;
+    //private SecurityService securityService;
 
     public MainLayout(AuthenticatedUser authenticatedUser, AccessAnnotationChecker accessChecker) {
+        //this.securityService = securityService;
         this.authenticatedUser = authenticatedUser;
         this.accessChecker = accessChecker;
 
@@ -93,13 +101,16 @@ public class MainLayout extends AppLayout {
         viewTitle = new H1();
         viewTitle.addClassNames("view-title");
 
-        Header header = new Header(toggle, viewTitle);
+        Button logout = new Button("Log out", e -> SecurityService.logout());
+
+        HorizontalLayout header = new HorizontalLayout(toggle, viewTitle, logout);
+        header.expand(viewTitle);
         header.addClassNames("view-header");
         return header;
     }
 
     private Component createDrawerContent() {
-        H2 appName = new H2("My App");
+        H2 appName = new H2("BadPanther");
         appName.addClassNames("app-name");
 
         com.vaadin.flow.component.html.Section section = new com.vaadin.flow.component.html.Section(appName,
@@ -129,9 +140,11 @@ public class MainLayout extends AppLayout {
 
     private MenuItemInfo[] createMenuItems() {
         return new MenuItemInfo[]{ //
-                new MenuItemInfo("Hello World", "la la-globe", HelloWorldView.class), //
+                new MenuItemInfo("Clients", "la la-globe", NewClientView.class), //
 
                 new MenuItemInfo("About", "la la-file", AboutView.class), //
+
+                new MenuItemInfo("New User", "la la-file", NewUserView.class), //
 
         };
     }

@@ -2,7 +2,7 @@ package com.example.application.data.generator;
 
 import com.example.application.data.Role;
 import com.example.application.data.entity.User;
-import com.example.application.data.service.UserRepository;
+import com.example.application.data.service.user.UserRepository;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import java.util.Collections;
 import java.util.Set;
